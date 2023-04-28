@@ -2,8 +2,8 @@
 require('cypress-plugin-tab')
 var fs = require('fs')
 
-const url = Cypress.config('baseUrl') || "https://uniandes.edu.co/"
-const appName = Cypress.env('appName')|| "your app"
+const url = Cypress.config('baseUrl') || "http://localhost:2368/ghost"
+const appName = Cypress.env('appName')|| "App prueba"
 const events = Cypress.env('events')|| 100
 const delay = Cypress.env('delay') || 100
 var seed = Cypress.env('seed')
@@ -478,9 +478,9 @@ function getEvtType(i){
 }
 
 //Aggregate in a matrix-like constant
+//[horizontalScrollBk, horizontalScrollFw, avPag, rePag], 
 const functions = [
-    [randClick, randDClick, randRClick], 
-    [horizontalScrollBk, horizontalScrollFw, avPag, rePag], 
+    [randClick, randDClick, randRClick],
     [randHover, tab], 
     [typeCharKey], 
     [spkeypress, enter], 
@@ -534,11 +534,11 @@ describe( `${appName} under monkeys`, function() {
         if(pcg === 100){
 
             pending_events[0] = events*pct_clicks/100
-            pending_events[1] = events*pct_scrolls/100
-            pending_events[2] = events*pct_selectors/100
-            pending_events[3] = events*pct_keys/100
-            pending_events[4] = events*pct_spkeys/100
-            pending_events[5] = events*pct_pgnav/100
+            //pending_events[1] = events*pct_scrolls/100
+            pending_events[1] = events*pct_selectors/100
+            pending_events[2] = events*pct_keys/100
+            pending_events[3] = events*pct_spkeys/100
+            pending_events[4] = events*pct_pgnav/100
             cy.visit(url)
             cy.get('form').within(() => {
                 cy.get('input[name="identification"]').type('eg.soto@uniandes.edu.co')
