@@ -288,11 +288,11 @@ function avPag(){
     if(curPageMaxY - curY >= viewportHeight){ 
         if(curPageMaxY - (curY + viewportHeight) >= viewportHeight){
             curY = curY + viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
         } 
         else{
             curY = curPageMaxY - viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
             info += "Page limit reached! "
         }
         info += `Successfully scrolled down from y=${prev} to y=${curY}`
@@ -312,12 +312,12 @@ function rePag(){
     else{
         if(viewportHeight > curY){
             curY =  0
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
             info += "Page limit reached! "
         }
         else{
             curY = curY - viewportHeight
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
         }
         info += `Successfully scrolled up from y=${prev} to y=${curY}`
     }
@@ -330,11 +330,11 @@ function horizontalScrollFw(){
     if(curPageMaxX - curX >= viewportWidth){ 
         if(curPageMaxX - (curX + viewportWidth) >= viewportWidth){
             curX = curX + viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
         } 
         else{
             curX = curPageMaxX - viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
             info += "Page limit reached! "
         }
         info += `Successfully scrolled to the right from x=${prev} to x=${curX}`
@@ -354,12 +354,12 @@ function horizontalScrollBk(){
     else{
         if(viewportWidth > curX){
             curX =  0
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
             info += "Page limit reached! "
         }
         else{
             curX = curX - viewportWidth
-            cy.scrollTo(curX, curY)
+            cy.scrollTo(curX, curY, { ensureScrollable: false })
         }
         info += `Successfully scrolled to the left from x=${prev} to x=${curX}`
     }
@@ -539,8 +539,15 @@ describe( `${appName} under monkeys`, function() {
             pending_events[3] = events*pct_keys/100
             pending_events[4] = events*pct_spkeys/100
             pending_events[5] = events*pct_pgnav/100
-            
-            cy.visit(url).then((win)=>{   
+            cy.visit(url)
+            cy.get('form').within(() => {
+                cy.get('input[name="identification"]').type('eg.soto@uniandes.edu.co')
+                cy.get('input[name="password"]').type('Supermean_1')
+                cy.get('button[class="login gh-btn gh-btn-login gh-btn-block gh-btn-icon ember-view"]').click()
+            })
+            cy.window().then((win)=>{ 
+                
+                
                 let d = win.document
                 curPageMaxY = Math.max( d.body.scrollHeight, d.body.offsetHeight, d.documentElement.clientHeight, d.documentElement.scrollHeight, d.documentElement.offsetHeight) - win.innerHeight
                 curPageMaxX = Math.max( d.body.scrollWidth, d.body.offsetWidth, d.documentElement.clientWidth, d.documentElement.scrollWidth, d.documentElement.offsetWidth) - win.innerWidth
